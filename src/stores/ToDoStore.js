@@ -11,13 +11,13 @@ class ToDoStore extends EventEmitter {
 				description: 'On Friday 12/10/2016',
 				isCompleted: false,
 				tasks: [{
-					id: Date.now(),
+					id: Date.now()+1,
 					title: 'Go to the doctor',
 					description: 'At 17:00',
 					isCompleted: false
 				},
 				{
-					id: Date.now(),
+					id: Date.now()+2,
 					title: 'Return the book to the library',
 					description: 'I have to return the Bible to the uni library',
 					isCompleted: true
@@ -25,8 +25,8 @@ class ToDoStore extends EventEmitter {
 				]
 			},
 			{
-				id: Date.now(),
-				title: 'eat dinner',
+				id: Date.now()+3,
+				title: 'Stuff for 2017',
 				isCompleted: true
 			}
 		];
@@ -57,7 +57,6 @@ class ToDoStore extends EventEmitter {
 	}
 
 	handleActions(action) {
-		console.log("ToDoStore received an action");
 		switch(action.type) {
 			case "CREATE_LIST": {
 				this.createList(action.text);

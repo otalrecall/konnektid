@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default class List extends React.Component {
+export default class Main extends React.Component {
 	render() {
 		return (
 			<div>
-				<h1>{this.props.id}</h1>
+				<h1>{this.props.params.id}</h1>
 			</div>
 		);
 	}

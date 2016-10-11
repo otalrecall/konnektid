@@ -13,8 +13,7 @@ export default class ListItem extends React.Component {
 	renderTitleSection() {
 		const { title, isCompleted } = this.props;
 
-		const taskStyle = {
-			color: isCompleted ? 'green' : 'red',
+		const titleStyle = {
 			cursor: 'pointer'
 		};
 
@@ -29,8 +28,7 @@ export default class ListItem extends React.Component {
 		}
 
 		return (
-			<td style={taskStyle} onClick={this.props.toggleTask.bind(this, title)}>
-
+			<td style={titleStyle} onClick={this.onTitleClick.bind(this)}>
 
 			{title}
 
@@ -64,6 +62,11 @@ export default class ListItem extends React.Component {
 		);
 	}
 
+	onTitleClick() {
+		const path = `/list/${this.props.id}`;
+		this.props.history.push(path);
+	}
+
 	onEditClick() {
 		this.setState( { isEditing: true } );
 	}
@@ -80,5 +83,5 @@ export default class ListItem extends React.Component {
 		this.props.updateList(id, newTitle);
 		this.setState( { isEditing: false });
 	}
-
 }
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from '../components/Table';
-import CreateToDo from '../components/createtodo';
+import CreateToDo from '../components/CreateButton';
 import ToDoStore from '../stores/ToDoStore';
 import * as ToDoActions from 'actions/ToDoActions';
 
@@ -19,7 +19,9 @@ export default class Lists extends React.Component {
 	}
 
 	componentWillUnmount() {
-		ToDoStore.removeListener("change", this.getLists());
+		ToDoStore.removeListener("change", () => {
+			this.getLists()
+		})
 	}
 
 	getLists() {
@@ -34,6 +36,7 @@ export default class Lists extends React.Component {
 				<h1>To Do Lists</h1>
 				<CreateToDo todos={this.state.lists} createList={this.createList.bind(this)} />
 				<Table 
+					history={this.props.history}
 					headerText="List"
 					todos={this.state.lists}
 					toggleTask={this.toggleTask.bind(this)}
