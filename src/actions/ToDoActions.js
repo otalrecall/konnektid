@@ -16,8 +16,33 @@ export function deleteList(id) {
 
 export function updateList(id, newText) {
 	dispatcher.dispatch({
-		type: "UPDATE_LIST",
+		type: "UPDATE_TITLE_LIST",
 		id,
-		newText,
+		newText
+	});
+}
+
+export function createTask(idList, textTask) {
+	dispatcher.dispatch({
+		type: "CREATE_TASK",
+		idList,
+		textTask
+	});
+}
+
+export function updateTask(idList, idTask, newText) {
+	dispatcher.dispatch({
+		type: "UPDATE_TITLE_TASK",
+		idList,
+		idTask,
+		newText
+	});
+}
+
+export function deleteTask(idList, idTask) {
+	dispatcher.dispatch({
+		type: "DELETE_TASK",
+		idList,
+		idTask
 	});
 }

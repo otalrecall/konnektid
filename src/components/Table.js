@@ -1,14 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
 import Header from './Header';
-import ListItem from './ListItem';
+import TableItem from './TableItem';
 
 export default class Table extends React.Component {
 	renderItems() {
-		const props = _.omit(this.props, 'todos');
-
-		return _.map(this.props.todos, (todo, index) => <ListItem key={index} 
-			{...todo} {...props} />);
+		const props = _.omit(this.props, 'table');
+		return _.map(this.props.table, (elem, index) => <TableItem key={index} 
+			{...elem} {...props} />);
 	}
 
 	render() {

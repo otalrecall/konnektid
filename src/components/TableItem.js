@@ -11,7 +11,7 @@ export default class ListItem extends React.Component {
 	}
 
 	renderTitleSection() {
-		const { title, isCompleted } = this.props;
+		const { title } = this.props;
 
 		const titleStyle = {
 			cursor: 'pointer'
@@ -48,7 +48,7 @@ export default class ListItem extends React.Component {
 		return (
 			<td>
 				<button onClick={this.onEditClick.bind(this)}>Edit</button>
-				<button onClick={this.props.deleteList.bind(this, this.props.id)}>Delete</button>
+				<button onClick={this.props.deleteItem.bind(this, this.props.id)}>Delete</button>
 			</td>
 		);
 	}
@@ -63,8 +63,11 @@ export default class ListItem extends React.Component {
 	}
 
 	onTitleClick() {
-		const path = `/list/${this.props.id}`;
-		this.props.history.push(path);
+		if (this.props.isList) {
+			this.props.history.push(`/list/${this.props.id}`);
+		} else {
+			this.props.history.push(`/task/${this.props.id}`);
+		}
 	}
 
 	onEditClick() {
@@ -80,7 +83,7 @@ export default class ListItem extends React.Component {
 
 		const id = this.props.id;
 		const newTitle = this.refs.editInput.value;
-		this.props.updateList(id, newTitle);
+		this.props.updateItem(id, newTitle);
 		this.setState( { isEditing: false });
 	}
 }

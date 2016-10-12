@@ -8,26 +8,23 @@ class ToDoStore extends EventEmitter {
 			{
 				id: Date.now(),
 				title: 'Things to do on Friday',
-				description: 'On Friday 12/10/2016',
-				isCompleted: false,
 				tasks: [{
 					id: Date.now()+1,
 					title: 'Go to the doctor',
 					description: 'At 17:00',
-					isCompleted: false
+					isCompleted: true
 				},
 				{
 					id: Date.now()+2,
-					title: 'Return the book to the library',
-					description: 'I have to return the Bible to the uni library',
-					isCompleted: true
+					title: 'Hug my mum',
+					description: 'I havent hug her for long',
+					isCompleted: false
 				}
 				]
 			},
 			{
 				id: Date.now()+3,
-				title: 'Stuff for 2017',
-				isCompleted: true
+				title: 'Stuff for 2017'
 			}
 		];
 	}
@@ -36,24 +33,51 @@ class ToDoStore extends EventEmitter {
 		return this.lists;
 	}
 
+	getList(id) {
+		const list = _.find(this.lists, list => list.id === parseInt(id, 10));
+		return list;
+	}
+
 	createList(text) {
 		this.lists.push({
 			id: Date.now(),
-			title: text,
-			isCompleted: false
+			title: text
 		});
-		this.emit("change");
+		this.emit("changeLists");
 	}
 
 	deleteList(id) {
 		_.remove(this.lists, list => list.id === id);
-		this.emit("change");
+		this.emit("changeLists");
 	}
 
-	updateList(id, newText) {
+	updateTitleList(id, newText) {
 		const listToEdit = _.find(this.lists, list => list.id === id);
 		listToEdit.title = newText;
-		this.emit("change");
+		this.emit("changeLists");
+	}
+
+	createTask(idList, textTask) {
+		const list = _.find(this.lists, list => list.id === idList);
+		list.tasks.push({
+			id: Date.now(),
+			title: textTask,
+			isCompleted: false
+		});
+		this.emit("changeList");
+	}
+
+	deleteTask(idList, idTask) {
+		const list = _.find(this.lists, list => list.id === idList);
+		_.remove(list.tasks, task => task.id === idTask);
+		this.emit("changeList");
+	}
+
+	updateTitleTask(idList, idTask, newText) {
+		const list = _.find(this.lists, list => list.id === idList);
+		const task = _.find(list.tasks, task => task.id === idTask);
+		task.title = newText;
+		this.emit("changeList");
 	}
 
 	handleActions(action) {
@@ -66,8 +90,20 @@ class ToDoStore extends EventEmitter {
 				this.deleteList(action.id);
 				break;
 			}
-			case "UPDATE_LIST": {
-				this.updateList(action.id, action.newText);
+			case "UPDATE_TITLE_LIST": {
+				this.updateTitleList(action.id, action.newText);
+				break;
+			}
+			case "CREATE_TASK": {
+				this.createTask(action.idList, action.textTask);
+				break;
+			}
+			case "DELETE_TASK": {
+				this.deleteTask(action.idList, action.idTask);
+				break;
+			}
+			case "UPDATE_TITLE_TASK": {
+				this.updateTitleTask(action.idList, action.idTask, action.newText);
 				break;
 			}
 		}

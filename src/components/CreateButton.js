@@ -19,7 +19,7 @@ export default class TodosList extends React.Component {
         return (
             <form onSubmit={this.handleCreate.bind(this)}>
                 <input type="text" ref="createInput" />
-                <button>New List</button>
+                <button>Add</button>
                 {this.renderError()}
             </form>
         );
@@ -29,24 +29,23 @@ export default class TodosList extends React.Component {
         event.preventDefault();
 
         const createInput = this.refs.createInput;
-        const task = createInput.value;
-        const validateInput = this.validateInput(task);
+        const title = createInput.value;
+        const validateInput = this.validateInput(title);
 
         if (validateInput) {
-            this.setState({ error: this.validateInput(task) });
+            this.setState({ error: validateInput });
             return;
         }
 
         this.setState({ error: null });
-        this.props.createList(task);
+
+        this.props.createItem(title);
         this.refs.createInput.value = '';
     }
 
-    validateInput(task) {
-        if (!task) {
-            return 'Please enter a task.';
-        } else if (_.find(this.props.todos, todo => todo.task === task)) {
-            return 'Task already exists.';
+    validateInput(title) {
+        if (!title) {
+            return 'Please enter a list.';
         } else {
             return null;
         }

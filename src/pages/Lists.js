@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from '../components/Table';
-import CreateToDo from '../components/CreateButton';
+import CreateButton from '../components/CreateButton';
 import ToDoStore from '../stores/ToDoStore';
 import * as ToDoActions from 'actions/ToDoActions';
 
@@ -12,14 +12,14 @@ export default class Lists extends React.Component {
 		};
 	}
 
-	componentWillMount() {
-		ToDoStore.on("change", () => {
+	componentDidMount() {
+		ToDoStore.on("changeLists", () => {
 			this.getLists()
 		})
 	}
 
 	componentWillUnmount() {
-		ToDoStore.removeListener("change", () => {
+		ToDoStore.removeListener("changeLists", () => {
 			this.getLists()
 		})
 	}
@@ -34,35 +34,28 @@ export default class Lists extends React.Component {
 		return (
 			<div>
 				<h1>To Do Lists</h1>
-				<CreateToDo todos={this.state.lists} createList={this.createList.bind(this)} />
+				<CreateButton lists={this.state.lists} createItem={this.createItem.bind(this)} />
 				<Table 
 					history={this.props.history}
 					headerText="List"
-					todos={this.state.lists}
-					toggleTask={this.toggleTask.bind(this)}
-					updateList={this.updateList.bind(this)}
-					deleteList={this.deleteList.bind(this)}
+					table={this.state.lists}
+					updateItem={this.updateItem.bind(this)}
+					deleteItem={this.deleteItem.bind(this)}
+					isList={true}
 				/>
 			</div>
 		);
 	}
 
-
-	toggleTask(task) {
-		const foundTodo = _.find(this.state.lists, list => list.title === task);
-		foundTodo.isCompleted = !foundTodo.isCompleted;
-		this.setState({ lists: this.state.lists });
-	}
-
-	createList(text) {
+	createItem(text) {
 		ToDoActions.createList(text);
 	}
 
-	updateList(oldTitle, newTitle) {
-		ToDoActions.updateList(oldTitle, newTitle);
+	updateItem(id, newTitle) {
+		ToDoActions.updateList(id, newTitle);
 	}
 
-	deleteList(id) {
+	deleteItem(id) {
 		ToDoActions.deleteList(id);
 	}
 }
