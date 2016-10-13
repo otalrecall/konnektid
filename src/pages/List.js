@@ -57,7 +57,7 @@ export default class Main extends React.Component {
 	}
 
 	updateItem(idTask, newTitle) {
-		ToDoActions.updateTask(this.state.listId, idTask, newTitle);
+		ToDoActions.updateTaskTitle(this.state.listId, idTask, newTitle);
 	}
 
 	deleteItem(idTask) {
@@ -65,7 +65,6 @@ export default class Main extends React.Component {
 	}
 
 	filterTask(filterType) {
-		console.log(filterType);
 		this.setState({
 			tasks: ToDoStore.getFilteredTasks(this.props.params.id, filterType),
 			filterType
@@ -73,7 +72,6 @@ export default class Main extends React.Component {
 	}
 
 	setCompletedTask(idTask, isCompleted) {
-		console.log(isCompleted);
 		ToDoActions.setCompletedTask(this.state.listId, idTask, isCompleted);
 	}
 

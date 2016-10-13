@@ -30,18 +30,26 @@ export function createTask(idList, textTask) {
 	});
 }
 
-export function updateTask(idList, idTask, newText) {
+export function updateTaskTitle(idList, idTask, newText) {
 	dispatcher.dispatch({
-		type: "UPDATE_TITLE_TASK",
+		type: "UPDATE_TASK_TITLE",
 		idList,
 		idTask,
 		newText
 	});
 }
 
+export function updateTaskDescription(idTask, newDescription) {
+	dispatcher.dispatch({
+		type: "UPDATE_TASK_DESCRIPTION",
+		idTask,
+		newDescription
+	});
+}
+
 export function setCompletedTask(idList, idTask, isCompleted) {
 	dispatcher.dispatch({
-		type: "SET_COMPLETED_TASK",
+		type: "SET_COMPLETED_TASK_IDLIST",
 		idList,
 		idTask,
 		isCompleted

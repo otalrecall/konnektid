@@ -100,7 +100,7 @@ export default class ListItem extends React.Component {
 		this.setState( { isEditing: false } );
 	}
 
-	onSaveClick() {
+	onSaveClick(event) {
 		event.preventDefault();
 
 		const id = this.props.id;

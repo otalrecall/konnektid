@@ -50,6 +50,16 @@ class ToDoStore extends EventEmitter {
 		return list.tasks;
 	}
 
+	getTask(id) {
+		for (var i in this.lists) {
+			const task = _.find(this.lists[i].tasks, task => task.id === parseInt(id, 10));
+			if (task) {
+				return task;
+			}
+		}
+		return null;
+	}
+
 	getFilteredTasks(idList, filterType) {
 		switch (filterType) {
 			case "ALL_FILTER": {
@@ -67,13 +77,11 @@ class ToDoStore extends EventEmitter {
 	}
 
 	isTaskCompleted(id) {
-		for (var i in this.lists) {
-			const task = _.find(this.lists[i].tasks, task => task.id === parseInt(id, 10));
-			if (task && task.isCompleted) {
-				return true;
-			}
+		const task = this.getTask(id);
+		if (task) {
+			return task.isCompleted;
 		}
-		return false;
+		return null;
 	}
 
 	createList(text) {
@@ -113,11 +121,18 @@ class ToDoStore extends EventEmitter {
 		this.emit("changeTasks");
 	}
 
-	updateTitleTask(idList, idTask, newText) {
+	updateTaskTitle(idList, idTask, newText) {
 		const list = _.find(this.lists, list => list.id === parseInt(idList, 10));
 		const task = _.find(list.tasks, task => task.id === parseInt(idTask, 10));
 		task.title = newText;
 		this.emit("changeTasks");
+	}
+
+	updateTaskDescription(idTask, newDescription) {
+		console.log()
+		const task = this.getTask(idTask);
+		task.description = newDescription;
+		this.emit("changeTask");
 	}
 
 	setCompletedTask(idList, idTask, isCompleted) {
@@ -149,8 +164,12 @@ class ToDoStore extends EventEmitter {
 				this.deleteTask(action.idList, action.idTask);
 				break;
 			}
-			case "UPDATE_TITLE_TASK": {
-				this.updateTitleTask(action.idList, action.idTask, action.newText);
+			case "UPDATE_TASK_TITLE": {
+				this.updateTaskTitle(action.idList, action.idTask, action.newText);
+				break;
+			}
+			case "UPDATE_TASK_DESCRIPTION": {
+				this.updateTaskDescription(action.idTask, action.newDescription);
 				break;
 			}
 			case "SET_COMPLETED_TASK": {
