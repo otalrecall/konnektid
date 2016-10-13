@@ -129,7 +129,6 @@ class ToDoStore extends EventEmitter {
 	}
 
 	updateTaskDescription(idTask, newDescription) {
-		console.log()
 		const task = this.getTask(idTask);
 		task.description = newDescription;
 		this.emit("changeTask");

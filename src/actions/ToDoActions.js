@@ -49,7 +49,7 @@ export function updateTaskDescription(idTask, newDescription) {
 
 export function setCompletedTask(idList, idTask, isCompleted) {
 	dispatcher.dispatch({
-		type: "SET_COMPLETED_TASK_IDLIST",
+		type: "SET_COMPLETED_TASK",
 		idList,
 		idTask,
 		isCompleted
