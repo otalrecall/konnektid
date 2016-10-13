@@ -39,6 +39,15 @@ export function updateTask(idList, idTask, newText) {
 	});
 }
 
+export function setCompletedTask(idList, idTask, isCompleted) {
+	dispatcher.dispatch({
+		type: "SET_COMPLETED_TASK",
+		idList,
+		idTask,
+		isCompleted
+	});
+}
+
 export function deleteTask(idList, idTask) {
 	dispatcher.dispatch({
 		type: "DELETE_TASK",

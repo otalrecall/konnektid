@@ -41,7 +41,9 @@ export default class Main extends React.Component {
 					table={this.state.tasks}
 					updateItem={this.updateItem.bind(this)}
 					deleteItem={this.deleteItem.bind(this)}
+					setCompletedTask={this.setCompletedTask.bind(this)}
 					isList={false}
+					filterType={this.state.filterType}
 				/>
 				<Footer 
 					filterTask={this.filterTask.bind(this)}
@@ -63,9 +65,16 @@ export default class Main extends React.Component {
 	}
 
 	filterTask(filterType) {
+		console.log(filterType);
 		this.setState({
 			tasks: ToDoStore.getFilteredTasks(this.props.params.id, filterType),
 			filterType
 		});
 	}
+
+	setCompletedTask(idTask, isCompleted) {
+		console.log(isCompleted);
+		ToDoActions.setCompletedTask(this.state.listId, idTask, isCompleted);
+	}
+
 }

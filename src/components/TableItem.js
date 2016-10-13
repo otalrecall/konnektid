@@ -1,13 +1,19 @@
 import React from 'react';
-import { Link } from "react-router";
+import ToDoStore from '../stores/ToDoStore';
 
 export default class ListItem extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			isEditing: false
+			isEditing: false,
+			checked: ToDoStore.isTaskCompleted(this.props.id)
 		};
+	}
+
+	check() {
+		this.state.checked = !this.state.checked;
+		this.props.setCompletedTask(this.props.id, this.state.checked);
 	}
 
 	renderTitleSection() {
@@ -27,15 +33,29 @@ export default class ListItem extends React.Component {
 			);
 		}
 
-		return (
-			<td> 
-			<label style={titleStyle} onClick={this.onTitleClick.bind(this)}>
-			
-			{title}
+		
+		if (!this.props.isList && this.props.filterType == 'ALL_FILTER') {
+			return (
+				<td> 
+					<input type="checkbox" onChange={this.check.bind(this)} checked={this.state.checked}/>
+					<label style={titleStyle} onClick={this.onTitleClick.bind(this)}>
+				
+					{title}
 
-			</label>
-			</td>
-		)
+					</label>
+				</td>
+			)
+		} else {
+			return (
+				<td> 
+					<label style={titleStyle} onClick={this.onTitleClick.bind(this)}>
+				
+					{title}
+
+					</label>
+				</td>
+			)
+		}
 	}
 
 	renderActionSection() {

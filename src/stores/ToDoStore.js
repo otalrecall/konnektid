@@ -66,6 +66,16 @@ class ToDoStore extends EventEmitter {
 		}
 	}
 
+	isTaskCompleted(id) {
+		for (var i in this.lists) {
+			const task = _.find(this.lists[i].tasks, task => task.id === parseInt(id, 10));
+			if (task && task.isCompleted) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	createList(text) {
 		this.lists.push({
 			id: Date.now(),
@@ -110,6 +120,13 @@ class ToDoStore extends EventEmitter {
 		this.emit("changeTasks");
 	}
 
+	setCompletedTask(idList, idTask, isCompleted) {
+		const list = _.find(this.lists, list => list.id === parseInt(idList, 10));
+		const task = _.find(list.tasks, task => task.id === parseInt(idTask, 10));
+		task.isCompleted = isCompleted;
+		this.emit("changeTasks");
+	}
+
 	handleActions(action) {
 		switch(action.type) {
 			case "CREATE_LIST": {
@@ -134,6 +151,10 @@ class ToDoStore extends EventEmitter {
 			}
 			case "UPDATE_TITLE_TASK": {
 				this.updateTitleTask(action.idList, action.idTask, action.newText);
+				break;
+			}
+			case "SET_COMPLETED_TASK": {
+				this.setCompletedTask(action.idList, action.idTask, action.isCompleted);
 				break;
 			}
 		}
