@@ -19,12 +19,19 @@ class ToDoStore extends EventEmitter {
 					title: 'Hug my mum',
 					description: 'I havent hug her for long',
 					isCompleted: false
+				},
+				{
+					id: Date.now()+3,
+					title: 'Make new friends',
+					description: 'Go to the street to meet people',
+					isCompleted: true
 				}
 				]
 			},
 			{
-				id: Date.now()+3,
-				title: 'Stuff for 2017'
+				id: Date.now()+4,
+				title: 'Stuff for 2017',	
+				tasks: []
 			}
 		];
 	}
@@ -33,15 +40,37 @@ class ToDoStore extends EventEmitter {
 		return this.lists;
 	}
 
-	getList(id) {
+	getListTitle(id) {
 		const list = _.find(this.lists, list => list.id === parseInt(id, 10));
-		return list;
+		return list.title;
+	}
+
+	getTasks(id) {
+		const list = _.find(this.lists, list => list.id === parseInt(id, 10));
+		return list.tasks;
+	}
+
+	getFilteredTasks(idList, filterType) {
+		switch (filterType) {
+			case "ALL_FILTER": {
+				return this.getTasks(idList);
+			}
+			case "COMPLETED_FILTER": {
+				const list = _.find(this.lists, list => list.id === parseInt(idList, 10));
+				return _.filter(list.tasks, task => task.isCompleted === true);
+			}
+			case "ACTIVE_FILTER": {
+				const list = _.find(this.lists, list => list.id === parseInt(idList, 10));
+				return _.filter(list.tasks, task => task.isCompleted === false);
+			}
+		}
 	}
 
 	createList(text) {
 		this.lists.push({
 			id: Date.now(),
-			title: text
+			title: text,
+			tasks: []
 		});
 		this.emit("changeLists");
 	}
@@ -58,26 +87,27 @@ class ToDoStore extends EventEmitter {
 	}
 
 	createTask(idList, textTask) {
-		const list = _.find(this.lists, list => list.id === idList);
+		const list = _.find(this.lists, list => list.id === parseInt(idList, 10));
 		list.tasks.push({
 			id: Date.now(),
 			title: textTask,
+			description: '',
 			isCompleted: false
 		});
-		this.emit("changeList");
+		this.emit("changeTasks");
 	}
 
 	deleteTask(idList, idTask) {
-		const list = _.find(this.lists, list => list.id === idList);
+		const list = _.find(this.lists, list => list.id === parseInt(idList, 10));
 		_.remove(list.tasks, task => task.id === idTask);
-		this.emit("changeList");
+		this.emit("changeTasks");
 	}
 
 	updateTitleTask(idList, idTask, newText) {
-		const list = _.find(this.lists, list => list.id === idList);
-		const task = _.find(list.tasks, task => task.id === idTask);
+		const list = _.find(this.lists, list => list.id === parseInt(idList, 10));
+		const task = _.find(list.tasks, task => task.id === parseInt(idTask, 10));
 		task.title = newText;
-		this.emit("changeList");
+		this.emit("changeTasks");
 	}
 
 	handleActions(action) {

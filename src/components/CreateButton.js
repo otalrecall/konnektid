@@ -45,7 +45,7 @@ export default class TodosList extends React.Component {
 
     validateInput(title) {
         if (!title) {
-            return 'Please enter a list.';
+            return 'Please enter a text.';
         } else {
             return null;
         }

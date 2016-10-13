@@ -28,10 +28,12 @@ export default class ListItem extends React.Component {
 		}
 
 		return (
-			<td style={titleStyle} onClick={this.onTitleClick.bind(this)}>
-
+			<td> 
+			<label style={titleStyle} onClick={this.onTitleClick.bind(this)}>
+			
 			{title}
 
+			</label>
 			</td>
 		)
 	}

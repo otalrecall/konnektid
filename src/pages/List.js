@@ -1,6 +1,7 @@
 import React from 'react';
 import Table from '../components/Table';
 import CreateButton from '../components/CreateButton';
+import Footer from '../components/Footer';
 import ToDoStore from '../stores/ToDoStore';
 import * as ToDoActions from 'actions/ToDoActions';
 
@@ -8,54 +9,63 @@ export default class Main extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			list: ToDoStore.getList(this.props.params.id)
+			listId: this.props.params.id,
+			listTitle: ToDoStore.getListTitle(this.props.params.id),
+			tasks: ToDoStore.getTasks(this.props.params.id),
+			filterType: 'ALL_FILTER'
 		};
 	}
 
 	componentDidMount() {
-		ToDoStore.on("changeList", () => {
-			this.getList()
+		ToDoStore.on("changeTasks", () => {
+			this.filterTask(this.state.filterType);
 		})
 	}
 
 	componentWillUnmount() {
-		ToDoStore.removeListener("changeList", () => {
-			this.getList()
+		ToDoStore.removeListener("changeTasks", () => {
+			this.filterTask(this.state.filterType)
 		})
-	}
-
-	getList() {
-		this.setState({
-			list: ToDoStore.getList(this.props.params.id)
-		});
 	}
 
 	render() {
 		return (
 			<div>
-				<h1>{this.state.list.title} Tasks</h1>
-				<CreateButton list={this.state.list} createItem={this.createItem.bind(this)} />
+				<h1>{this.state.listTitle} Tasks</h1>
+				<CreateButton 
+					createItem={this.createItem.bind(this)} 
+				/>
 				<Table 
 					history={this.props.history}
 					headerText="Task"
-					table={this.state.list.tasks}
+					table={this.state.tasks}
 					updateItem={this.updateItem.bind(this)}
 					deleteItem={this.deleteItem.bind(this)}
 					isList={false}
+				/>
+				<Footer 
+					filterTask={this.filterTask.bind(this)}
 				/>
 			</div>
 		);
 	}
 
 	createItem(text) {
-		ToDoActions.createTask(this.state.list.id, text);
+		ToDoActions.createTask(this.state.listId, text);
 	}
 
 	updateItem(idTask, newTitle) {
-		ToDoActions.updateTask(this.state.list.id, idTask, newTitle);
+		ToDoActions.updateTask(this.state.listId, idTask, newTitle);
 	}
 
 	deleteItem(idTask) {
-		ToDoActions.deleteTask(this.state.list.id, idTask);
+		ToDoActions.deleteTask(this.state.listId, idTask);
+	}
+
+	filterTask(filterType) {
+		this.setState({
+			tasks: ToDoStore.getFilteredTasks(this.props.params.id, filterType),
+			filterType
+		});
 	}
 }
