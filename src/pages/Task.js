@@ -5,6 +5,7 @@ import * as ToDoActions from 'actions/ToDoActions';
 export default class Task extends React.Component {
 	constructor(props) {
 		super(props);
+		this.getTask = this.getTask.bind(this);
 		this.state = {
 			taskId: this.props.params.id,
 			task: ToDoStore.getTask(this.props.params.id),
@@ -12,16 +13,12 @@ export default class Task extends React.Component {
 		}
 	}
 
-	componentDidMount() {
-		ToDoStore.on("changeTask", () => {
-			this.getTask()
-		})
+	componentWillMount() {
+		ToDoStore.on("changeTask", this.getTask)
 	}
 
 	componentWillUnmount() {
-		ToDoStore.removeListener("changeTask", () => {
-			this.getTask()
-		})
+		ToDoStore.removeListener("changeTask", this.getTask)
 	}
 
 	getTask() {

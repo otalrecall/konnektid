@@ -9,19 +9,7 @@ export default class Footer extends React.Component {
 	    	checkedActive: false, 
 	    	checkedCompleted: false
 	    };
-  	}
-
-  	getFilterType() {
-  		if (this.state.checkedAll) {
-  			return 'ALL_FILTER';
-  		}
-  		else if (this.state.checkedActive) {
-  			return 'ACTIVE_FILTER';
-  		}
-  		else {
-  			return 'COMPLETED_FILTER';
-  		}
-  	}	  
+  	}  
 
 	showAll() {
 		this.setState({
@@ -29,7 +17,7 @@ export default class Footer extends React.Component {
         	checkedActive: false,
         	checkedCompleted: false     
     	})
-		this.props.filterTask('ALL_FILTER');
+		this.props.setFilterTask('ALL_FILTER');
 	}
 
 	showActive() {
@@ -38,7 +26,7 @@ export default class Footer extends React.Component {
         	checkedActive: true,
         	checkedCompleted: false      
     	})
-		this.props.filterTask('ACTIVE_FILTER');
+		this.props.setFilterTask('ACTIVE_FILTER');
 	}
 
 	showCompleted() {
@@ -47,7 +35,7 @@ export default class Footer extends React.Component {
         	checkedActive: false,
         	checkedCompleted: true       
     	})
-		this.props.filterTask('COMPLETED_FILTER');
+		this.props.setFilterTask('COMPLETED_FILTER');
 	}
 
 	render() {

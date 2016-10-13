@@ -8,23 +8,28 @@ import * as ToDoActions from 'actions/ToDoActions';
 export default class Main extends React.Component {
 	constructor(props) {
 		super(props);
+		
 		this.state = {
 			listId: this.props.params.id,
 			listTitle: ToDoStore.getListTitle(this.props.params.id),
 			tasks: ToDoStore.getTasks(this.props.params.id),
 			filterType: 'ALL_FILTER'
 		};
+
+		this.filterTask = this.filterTask.bind(this, this.state.filterType);
 	}
 
 	componentDidMount() {
-		ToDoStore.on("changeTasks", () => {
-			this.filterTask(this.state.filterType);
-		})
+		ToDoStore.on("changeTasks", this.filterTask);
 	}
 
 	componentWillUnmount() {
-		ToDoStore.removeListener("changeTasks", () => {
-			this.filterTask(this.state.filterType)
+		ToDoStore.removeListener("changeTasks", this.filterTask)
+	}
+
+	filterTask() {
+		this.setState({
+			tasks: ToDoStore.getFilteredTasks(this.props.params.id, this.state.filterType)
 		})
 	}
 
@@ -46,7 +51,7 @@ export default class Main extends React.Component {
 					filterType={this.state.filterType}
 				/>
 				<Footer 
-					filterTask={this.filterTask.bind(this)}
+					setFilterTask={this.setFilterTask.bind(this)}
 				/>
 			</div>
 		);
@@ -64,7 +69,7 @@ export default class Main extends React.Component {
 		ToDoActions.deleteTask(this.state.listId, idTask);
 	}
 
-	filterTask(filterType) {
+	setFilterTask(filterType) {
 		this.setState({
 			tasks: ToDoStore.getFilteredTasks(this.props.params.id, filterType),
 			filterType

@@ -7,21 +7,18 @@ import * as ToDoActions from 'actions/ToDoActions';
 export default class Lists extends React.Component {
 	constructor(props) {
 		super(props);
+		this.getLists = this.getLists.bind(this);
 		this.state = {
 			lists: ToDoStore.getLists()
 		};
 	}
 
-	componentDidMount() {
-		ToDoStore.on("changeLists", () => {
-			this.getLists()
-		})
+	componentWillMount() {
+		ToDoStore.on("changeLists", this.getLists);
 	}
 
 	componentWillUnmount() {
-		ToDoStore.removeListener("changeLists", () => {
-			this.getLists()
-		})
+		ToDoStore.removeListener("changeLists", this.getLists);
 	}
 
 	getLists() {
