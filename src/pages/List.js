@@ -19,7 +19,7 @@ export default class Main extends React.Component {
 		this.filterTask = this.filterTask.bind(this, this.state.filterType);
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		ToDoStore.on("changeTasks", this.filterTask);
 	}
 

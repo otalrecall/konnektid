@@ -31,7 +31,9 @@ export default class Lists extends React.Component {
 		return (
 			<div>
 				<h1>To Do Lists</h1>
-				<CreateButton lists={this.state.lists} createItem={this.createItem.bind(this)} />
+				<CreateButton 
+					createItem={this.createItem.bind(this)} 
+				/>
 				<Table 
 					history={this.props.history}
 					headerText="List"
